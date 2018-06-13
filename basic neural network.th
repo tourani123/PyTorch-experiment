@@ -1,0 +1,31 @@
+require 'torch'
+require 'nn'
+
+cmd = torch.CmdLine()
+cmd:text()
+cmd:text('Options for my NN')
+cmd:option('-units', 10,'units in the hidden layer')
+cmd:option('-learningRate', 0.1, 'learning rate')
+-- etc...
+cmd:text()
+opt = cmd:parse(arg)
+inputSize = 10
+hiddenLayer1Size = opt.units
+hiddenLayer2Size = opt.units
+
+mlp = nn.Sequential()
+
+mlp:add(nn.Linear(inputSize, 10))
+mlp:add(nn.Tanh())
+mlp:add(nn.Linear(hiddenLayer1Size, hiddenLayer2Size))
+mlp:add(nn.Tanh())
+
+nclasses = 2
+
+mlp:add(nn.Linear(hiddenLayer2Size, nclasses))
+mlp:add(nn.LogSoftMax())
+
+print(mlp)
+
+output = mlp:forward(torch.rand(1, 10))
+print(output)
